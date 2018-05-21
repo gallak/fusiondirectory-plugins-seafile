@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR FusionDirectory Project
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: FusionDirectory VERSION\n"
+"Report-Msgid-Bugs-To: bugs@fusiondirectory.org\n"
+"POT-Creation-Date: 2017-06-22 16:06+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: fusiondirectory <contact@fusiondirectory.org>, 2016\n"
+"Language-Team: French (https://www.transifex.com/fusiondirectory/teams/12202/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "LibreRoaming service"
+msgstr "Service LibreRoaming"
+
+msgid "Access Point Credential"
+msgstr "Information de connexion du poitn d'accès"
+
+msgid "LibreRoamingShareKey"
+msgstr "Clé secrete partagée"
+
+msgid "Key share between radius client/server"
+msgstr "Clé authentifiant la connexion entre le serveur radius et le proxy LibreRoaming"
+
+msgid "LibreRoamingClientTestAccount"
+msgstr "Compte de test"
+
+msgid "Test Account dedicated to this FreeLibreRoaming Server"
+msgstr "Compte de test pour la supervision du service"
+
+msgid "LibreRoamingClientTestPassword"
+msgstr "Mot de passe"
+
+msgid "Test password Account dedicated to this FreeLibreRoaming Server"
+msgstr "Mot de passe du compte de supervision"
+
+msgid "Access Point Properties"
+msgstr "Propriété du point d'accès"
+
+msgid "EAPProvided"
+msgstr "Protocole d'Authentification Etendu"
+
+msgid "EAP Type Provided"
+msgstr "Protocole d'authentification étendu fournit par le point d'accès"
+
+msgid "wifiFederation"
+msgstr "Fédération WIFI"
+
+msgid "Wifi Federation to connect ... Maybe One Day !!!"
+msgstr "Federation WIFI interconnecté ( Un jour peut être ...)"
+
+msgid "Technical contact"
+msgstr "Contact Technique"
+
+msgid "Person in charge of this service"
+msgstr "Personne en charge du service"
+
+msgid "List of Access Points"
+msgstr "Listes des points d'accès Wifi"
+
+msgid "Access Points provide by this host"
+msgstr "Points d'accés wifi fournit par ce service"
+
+msgid "Name of this Access point"
+msgstr "Nom du point d'accès"
+
+msgid "Description of this Access Point"
+msgstr "Description du point d'accès wifi"
+
+msgid "GPSYCoord"
+msgstr "Latitude"
+
+msgid "GPS Y Coordonate"
+msgstr "Coordonnées GPS (Latitude) "
+
+msgid "GPSXCoord"
+msgstr "Longitude"
+
+msgid "GPS X Coordonate"
+msgstr "Coordonnées GPS (Longitude)"

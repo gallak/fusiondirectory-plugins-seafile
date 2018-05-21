@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR FusionDirectory Project
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: FusionDirectory VERSION\n"
+"Report-Msgid-Bugs-To: bugs@fusiondirectory.org\n"
+"POT-Creation-Date: 2017-06-22 16:06+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: fusiondirectory <contact@fusiondirectory.org>, 2016\n"
+"Language-Team: French (https://www.transifex.com/fusiondirectory/teams/12202/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "LibreRoaming service"
+msgstr "LibreRoamin service"
+
+msgid "Access Point Credential"
+msgstr "Credential for thise access point"
+
+msgid "LibreRoamingShareKey"
+msgstr "Shared Key"
+
+msgid "Key share between radius client/server"
+msgstr "Shared Key between LibreRomaing client and server"
+
+msgid "LibreRoamingClientTestAccount"
+msgstr "Test account"
+
+msgid "Test Account dedicated to this FreeLibreRoaming Server"
+msgstr "Test Account dedicated to monitoring"
+
+msgid "LibreRoamingClientTestPassword"
+msgstr "Password"
+
+msgid "Test password Account dedicated to this FreeLibreRoaming Server"
+msgstr "Password for test account"
+
+msgid "Access Point Properties"
+msgstr "Access Point Properties"
+
+msgid "EAPProvided"
+msgstr "Extended Authentification Protocol"
+
+msgid "EAP Type Provided"
+msgstr "Extended authentification Protocol used by this access point"
+
+msgid "wifiFederation"
+msgstr "WIFI Federation"
+
+msgid "Wifi Federation to connect ... Maybe One Day !!!"
+msgstr "Interconnected WIFI Federation (maybe, one day)"
+
+msgid "Technical contact"
+msgstr "Technical Contact"
+
+msgid "Person in charge of this service"
+msgstr "Person in charge of this service"
+
+msgid "List of Access Points"
+msgstr "List of this access point"
+
+msgid "Access Points provide by this host"
+msgstr "Wifi access point provided by this service"
+
+msgid "Name of this Access point"
+msgstr "Name of this Access point"
+
+msgid "Description of this Access Point"
+msgstr "Description of this access point"
+
+msgid "GPSYCoord"
+msgstr "Latittude"
+
+msgid "GPS Y Coordonate"
+msgstr "GPS Coordinate (Latitude) "
+
+msgid "GPSXCoord"
+msgstr "Longitude"
+
+msgid "GPS X Coordonate"
+msgstr "GPS Coordonate (Longitude)"

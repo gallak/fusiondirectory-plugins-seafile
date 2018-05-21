@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR FusionDirectory Project
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: FusionDirectory VERSION\n"
+"Report-Msgid-Bugs-To: bugs@fusiondirectory.org\n"
+"POT-Creation-Date: 2017-06-22 16:06+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: fusiondirectory <contact@fusiondirectory.org>, 2016\n"
+"Language-Team: French (https://www.transifex.com/fusiondirectory/teams/12202/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Seafile service"
+msgstr "Seafile Service"
+
+msgid "Seafile Server Properties"
+msgstr "Seafile Server Properties"
+
+msgid "fdSeafileServiceURI"
+msgstr "Seafile Web Service URI"
+
+msgid "URI of Seafile Web service"
+msgstr "Seafile WebService URI"
+
+msgid "fdSeafileServiceTechnicalAccount"
+msgstr "Seafile Technical Account"
+
+msgid "Technical user for managing Seafile Host"
+msgstr "Technical account for managing Seafile Object"
+
+msgid "fdSeafileServiceTechnicalPassword"
+msgstr "Password"
+
+msgid "Password of Technical user for managing Seafile Host"
+msgstr "Passqord of technical user for managing SeafileHost"
+
+msgid "Port dedicated to Seafile Web service"
+msgstr "Port dedicated to seafile Web Service"
