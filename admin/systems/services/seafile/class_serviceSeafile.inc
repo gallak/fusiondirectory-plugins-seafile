@@ -28,7 +28,7 @@ class serviceSeafile extends simpleService
     return array(
       'plShortName'   => _('Seafile service'),
       'plDescription' => _('Seafile service').' ('._('Services').')',
-      'plIcon'        => 'geticon.php?context=devices&icon=terminal&size=16',
+      'plIcon'        => 'geticon.php?context=applications&icon=seafile&size=16',
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     );
   }
