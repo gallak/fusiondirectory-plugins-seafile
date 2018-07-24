@@ -3,6 +3,7 @@
   This code is part of FusionDirectory (http://www.fusiondirectory.org/)
   Copyright (C) 2007  Fabian Hicker
   Copyright (C) 2011-2016  FusionDirectory
+  Copyright (C) 2018  Antoine Gallavardin
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,16 +22,14 @@
 
 
 /*!
-  \brief   mail plugin
+  \brief   seafile plugin
 
-  This class provides the functionality to read and write all attributes
-  relevant for mail accounts from/to the LDAP.
-
-  It does syntax checking and displays the formulars required.
-  Special handling like sieve or imap actions will be implemented
-  by the mailMethods.
+  This class provides the functionality to read and write all informations 
+  for creating / editing / deleting remote seafiel account.
 
  */
+ 
+ 
 
 
 class seafileAccount extends simplePlugin
@@ -38,17 +37,44 @@ class seafileAccount extends simplePlugin
   var $displayHeader  = TRUE;
   var $objectclasses  = array('fdSeafileAccount');
   var $myclient	= '';
+  
+  var $seafile_id='';
 
   private $mainSectionAttrs = array();
+  
+   /*!
+  *  \brief quota_to_image : it display a progress bar for showing capacity of remote seafile storage
+  */
+  static private function quota_to_image($use, $quota)
+  {
+      $usage = round(($use / $quota) * 100);
+      return "<img src='progress.php?x=100&amp;y=17&amp;p=$usage'>";
+  }
+  
+  /*!
+  *  \brief generateRandomString : return a random string.Whn creating an accoutn , a password is mandatory.
+  *  the password could be pushed by the normal way of FusionDirectory
+  */  
+  static private function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890&$)àç_è-("é&';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+  
 
   static function plInfo()
   {
     return array(
       'plShortName'     => _('Seafile'),
       'plDescription'   => _('Seafile settings'),
-      'plIcon'          => 'geticon.php?context=applications&icon=internet-mail&size=48',
-      'plSmallIcon'     => 'geticon.php?context=applications&icon=internet-mail&size=16',
-      'plSelfModify'    => TRUE,
+      'plIcon'          => 'geticon.php?context=applications&icon=seafile&size=48',
+      'plSmallIcon'     => 'geticon.php?context=applications&icon=seafile&size=16',
+      'plDepends'       => array('mailAccount'),
+      'plSelfModify'    => FALSE,
       'plPriority'      => 4,
       'plObjectType'    => array('user'),
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo()),
@@ -69,14 +95,16 @@ class seafileAccount extends simplePlugin
       'main' => array (
         'name'  => _('Seafile account'),
         'attrs' => array (
-          new StringAttribute (
+          new DisplayLDAPAttribute (
 	    _('Seafile User Id'),
 	    _('Seafile User name'),
-            'fdSeafileAccountUser', TRUE
+            'fdSeafileAccountUser',
+             TRUE,
+             ''
           ),
           new SelectAttribute (
             _('Server'), _('Specify the Seafile where the user will be hosted on'),
-            'fdSeafileAccountServer', FALSE,
+            'fdSeafileAccountServer', TRUE,
             array()
           ),
           new intAttribute (
@@ -98,22 +126,9 @@ class seafileAccount extends simplePlugin
 		FALSE,
 		TRUE
 		),
-	new StringAttribute(
-		_('User name displayed'),
-		_('This the user name display on seafile Interface'),
-		'fdSeafileAccountName',
-		FALSE,
-		''#$this->attrs['displayName'][0],
-	),
-	new StringAttribute(
-		_('Department of User'),
-		_('This is the name of the departement'),
-		'fdSeafileAccountDepartment',
-		FALSE,
-		''#$this->attrs['ou'][0],
-	)
-)	
-      ),
+
+		)	
+     ),
 
      'StatusSeafileAccount' => array(
         'name' => _('Status of Seafile Account'),
@@ -125,67 +140,84 @@ class seafileAccount extends simplePlugin
   }
 
 
-
-
   function execute()
   {
     $smarty = get_smarty();
 
-    $this->mainSectionAttrs = array_keys($this->attributesInfo['main']['attrs']);
     #
     # Fetch Seafile Server
     #
 	global $config;
 
+	# Some attribute are fixed
+	# mail is the Seafile ID	
+	$this->attributesAccess['fdSeafileAccountUser']->setValue($this->attrs['mail'][0]);
+	// Select all seafile server available in LDAP tree
+	$seafileServers = objects::ls('server', array('cn' => 1,
+									'fdSeafileServiceURI' => 1,
+									'fdSeafileServiceTechnicalAccount' => '*',
+									'fdSeafileServiceTechnicalPassword' => '*'),
+									 NULL,
+									 '(objectClass=fdSeafileService)');
+	
+	// define array for droplist
+	$profilesdn    = array();
+	$profileslabel = array();
 
-    $ldap = $config->get_ldap_link();
-    $ldap->search('(objectClass=fdSeafileService)', array('cn'));
-    $profilesdn    = array();
-    $profileslabel = array();
-    while ($attrs = $ldap->fetch()) {
-       $profilesdn[]    = $attrs['dn'];
-       $profileslabel[] = $attrs['cn'][0];
-    }
+   
+   
+	// filling the drop list of seafile server
+	foreach( $seafileServers as $key => $value ) { 
+		$profilesdn[] = $key;
+		$profileslabel[] = $value['cn'];
+	}   
+    // setting in object the seafile server choosed
     $this->attributesAccess['fdSeafileAccountServer']->setChoices($profilesdn, $profileslabel);
-
-	if (isset($this->attrs['fdSeafileAccountServer'][0]) && isset($this->attrs['fdSeafileAccountUser'][0])){
-		
-		$ldap = $config->get_ldap_link();
-		$array_dn=ldap_explode_dn($this->attrs['fdSeafileAccountServer'][0],1);
-		$ldap->search('(&(objectClass=fdSeafileService)(cn='.$array_dn[0].'))', array('fdSeafileServiceURI','fdSeafileServiceTechnicalAccount','fdSeafileServiceTechnicalPassword'));
-		$attrs = $ldap->fetch();
-		$urlParsed=parse_url($attrs['fdSeafileServiceURI'][0]);
+	
+	// if mail address and seafile server selected
+	if (isset($this->attrs['fdSeafileAccountServer'][0]) && isset($this->attrs['mail'][0])){	
+		// parsing the seafile server URL
+		$urlParsed=parse_url($seafileServers[$this->attrs['fdSeafileAccountServer'][0]]['fdSeafileServiceURI']);
+		$technicalAccount=$seafileServers[$this->attrs['fdSeafileAccountServer'][0]]['fdSeafileServiceTechnicalAccount'][0];
+		$technicalPassword=$seafileServers[$this->attrs['fdSeafileAccountServer'][0]]['fdSeafileServiceTechnicalPassword'][0];
+		// load Seafile Object
 		try {
 			$myclient=new SeafileAPI([
-				'url' => $urlParsed['scheme']."://".$urlParsed['host'],
-				'user' => $attrs['fdSeafileServiceTechnicalAccount'][0],
-				'password' => $attrs['fdSeafileServiceTechnicalPassword'][0],
-				'port' => $urlParsed['port']
+					'url' 		=> $urlParsed['scheme']."://".$urlParsed['host'],
+					'user' 		=> $technicalAccount,
+					'password' 	=> $technicalPassword,
+					'port' 		=> $urlParsed['port']
 				]);
-    
-			$info=$myclient->getAccount($this->attrs['fdSeafileAccountUser'][0]);
-			# storage are fetch in octets and chown and push in Mo
+
+			// try to get remote account
+			$info=$myclient->getAccount($this->attrs['mail'][0]);
+			// warning : storage are fetch in octets and chown and push in Mo
 			$usage= $info->usage / 1000 / 1000;
 			$total= $info->total / 1000 / 1000;
-			
+			// set SMARTY value
 			$smarty->assign('SEAFILE_USAGE',$usage);
 			$smarty->assign('SEAFILE_TOTAL',$total);
+			$smarty->assign('SEAFILE_BAR',$this->quota_to_image($usage, $total));
+			
+			//fetch Quota Value
 			$this->attributesAccess['fdSeafileAccountQuota']->setValue($total);
-			$this->attributesAccess['fdSeafileAccountName']->setValue($info->name);
-			$this->attributesAccess['fdSeafileAccountDepartment']->setValue($info->department);
+			///fetch account status
 			$this->attributesAccess['fdSeafileAccountIsActive']->setValue($info->is_active);
+			//fetch account status
 			$this->attributesAccess['fdSeafileAccountIsStaff']->setValue($info->is_staff);
 		}catch (Exception $e ){	
 			if ($myclient->seafile_code == "404"){
 				msg_dialog::display(_("Seafile error"), sprintf(_("Account %s not exist on %s  seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
-		}else{	
-			msg_dialog::display(_("Seafile error"), sprintf(_("Error on Fetching User inormations: %s"),
-            $e->getMessage()), ERROR_DIALOG);
+			}else{	
+				msg_dialog::display(_("Seafile error"), sprintf(_("Error on Fetching User inormations: %s"),
+				$e->getMessage()), ERROR_DIALOG);
+			}
 		}
-	}
 	}
   return parent::execute();
   }
+  
+
 
 
   function prepare_save(){
@@ -193,179 +225,155 @@ class seafileAccount extends simplePlugin
 	parent::prepare_save();
 	global $config;
 	
-	# faire apparaitre l'usage du quota
-    $ldap = $config->get_ldap_link();
-   # on recupere leCN
-    $array_dn=ldap_explode_dn($this->attrs['fdSeafileAccountServer'],1);
-    	
-	$ldap->search('(&(objectClass=fdSeafileService)(cn='.$array_dn[0].'))', array('fdSeafileServiceURI','fdSeafileServiceTechnicalAccount','fdSeafileServiceTechnicalPassword'));
+	
+	
+	// fetch server information
+	$seafileServers = objects::ls('server', array('cn' => 1,'fdSeafileServiceURI' => 1, 'fdSeafileServiceTechnicalAccount' => '*', 'fdSeafileServiceTechnicalPassword' => '*'), $this->attrs['fdSeafileAccountServer'], '(objectClass=fdSeafileService)');
+	$urlParsed=parse_url($seafileServers[$this->attrs['fdSeafileAccountServer']]['fdSeafileServiceURI']);
+	$technicalAccount=$seafileServers[$this->attrs['fdSeafileAccountServer']]['fdSeafileServiceTechnicalAccount'][0];
+	$technicalPassword=$seafileServers[$this->attrs['fdSeafileAccountServer']]['fdSeafileServiceTechnicalPassword'][0];
 
-	$attrs = $ldap->fetch();
-	$urlParsed=parse_url($attrs['fdSeafileServiceURI'][0]);
-		
+
 	try {
+		
+		
+		// create connection on seafile server
 		$myclient=new SeafileAPI([
 				'url' => $urlParsed['scheme']."://".$urlParsed['host'],
-				'user' => $attrs['fdSeafileServiceTechnicalAccount'][0],
-				'password' => $attrs['fdSeafileServiceTechnicalPassword'][0],
+				'user' => $technicalAccount,
+				'password' => $technicalPassword,
 				'port' => $urlParsed['port']
 				]);
+
 			
-		    $change_array=[];
-			if ( (integer) $this->attrs['fdSeafileAccountQuota'] != $info->total / 1000 / 1000 ) 
-				{ $change_array['storage'] = (integer) $this->attrs['fdSeafileAccountQuota'];}
-			if ($this->attrs['fdSeafileAccountName'] != $info->name)
-				{ $change_array['name'] = $this->attrs['fdSeafileAccountName'];}
-            if ($this->attrs['fdSeafileAccountDepartment'] != $info->department)
-                { $change_array['department'] = $this->attrs['fdSeafileAccountDepartment'];}
-			if ($this->attrs['fdSeafileAccountIsActive'] == "TRUE") {
-				$change_array['is_active'] = (integer) 1;
-			}else{
-			  	$change_array['is_active'] = (integer) 0;	
-			}
-			if ($this->attrs['fdSeafileAccountIsStaff'] == "TRUE") {
-				$change_array['is_staff']=(integer) 1;
-			}else{
-				$change_array['is_staff']=(integer) 0;
-			}
 			try {
-				$info=$myclient->getAccount($this->attr['fdSeafileAccountUser']);
-			}catch (Exception $e ){
+				//try to fetch the account give the information if we have to create it before
+				$info=$myclient->getAccount($this->attrs['fdSeafileAccountUser']);
+				//account exist so we modify it
+				
 				try {
-					$myclient->createAccount(
-						$this->attrs['fdSeafileAccountUser'],$this->attrs['fdSeafileAccountUser']);
-					}catch (Exception $e ){
-					msg_dialog::display(_("Seafile error"), sprintf(_("Unable to create account %s :  %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
+					// fetching information from form and compare it
+					$change_array=[];
+					if ( (integer) $this->attrs['fdSeafileAccountQuota'] != $info->total / 1000 / 1000 ) {
+						$change_array['storage'] = (integer) $this->attrs['fdSeafileAccountQuota'];
 					}
-			}
-			try {
-				$myclient->modifyAccount($this->attrs['fdSeafileAccountUser'],$change_array);
+
+					$is_active = 0;
+					$is_staff = 0;
+					
+					if ($this->attrs['fdSeafileAccountIsActive'] == "TRUE") { $is_active = 1; }
+					if ($this->attrs['fdSeafileAccountIsStaff'] == "TRUE") { $is_staff = 1; }
+					
+					if ( $info->is_active != $is_active) { $change_array['is_active'] = (integer) $is_active;}
+					if ( $info->is_staff != $is_staff) { $change_array['is_staff'] = (integer) $is_staff;}
+						
+					//fecthing information from user tab 
+					$userTab = $this->parent->by_object['user'];
+					if ( isset($userTab->displayName) && $userTab->displayName != $info->name){ 
+						$change_array['name'] = $userTab->displayName;
+					}
+					if ( isset($userTab->ou) && $userTab->ou != $info->department ){ 
+						$change_array['department'] = $userTab->ou;
+					}
+										
+					if ( $userTab->attributesAccess['userPassword']->getClear() != ""){ 
+						$change_array['password'] = $userTab->attributesAccess['userPassword']->getClear();
+					}					
+					
+					$myclient->modifyAccount($this->attrs['fdSeafileAccountUser'],$change_array);
+				}catch (Exception $e ){
+					msg_dialog::display(_("Seafile error"), sprintf(_("Unable to modify account %s :  %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
+				}
 			}catch (Exception $e ){
-				msg_dialog::display(_("Seafile error"), sprintf(_("Unable to modify account %s :  %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
+				
+				if ($myclient->seafile_code == "404"){
+					// account didn't exist we have to create it
+					try {
+						// Create thie account
+						$myclient->createAccount($this->attrs['fdSeafileAccountUser'],$this->generateRandomString(20));
+						// modify the account with the new information
+						// create modification array
+						// array wich contains all change to apply
+						$change_array=[];
+						if ( isset($this->attrs['fdSeafileAccountQuota'])){ 
+							$change_array['storage'] = (integer) $this->attrs['fdSeafileAccountQuota'];
+						}
+						if ($this->attrs['fdSeafileAccountIsActive'] == "TRUE") {
+							$change_array['is_active'] = (integer) 1;
+						}else{
+							$change_array['is_active'] = (integer) 0;	
+						}
+						if ($this->attrs['fdSeafileAccountIsStaff'] == "TRUE") {
+							$change_array['is_staff']=(integer) 1;
+						}else{
+							$change_array['is_staff']=(integer) 0;
+						}
+						// set inforation from usertab
+						$userTab = $this->parent->by_object['user'];
+						if ( isset($userTab->displayName)){ 
+							$change_array['name'] = $userTab->displayName;
+						}
+						if ( isset($userTab->ou)){ 
+							$change_array['department'] = $userTab->ou;
+						}
+						if ( $userTab->attributesAccess['userPassword']->getClear() != ""){ 
+							$change_array['password'] = $userTab->attributesAccess['userPassword']->getClear();
+						}	
+						// send modification
+						$myclient->modifyAccount($this->attrs['fdSeafileAccountUser'],$change_array);
+						
+					}catch (Exception $e ){
+						msg_dialog::display(_("Seafile error"), sprintf(_("Unable to create account %s :  %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
+					}		
+				}else{
+					//error or fetching information
+					msg_dialog::display(_("Seafile error"), sprintf(_("unable to fetch account information  of %s on %s  seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
+				}
 			}
+
 		}catch (Exception $e ){	
-			msg_dialog::display(_("Seafile error"), sprintf(_("Error on Fetching User inormations: %s"),
-            $e->getMessage()), ERROR_DIALOG);
+				msg_dialog::display(_("Seafile error"), sprintf(_("Unable to connect to Seafile Server"),
+				$e->getMessage()), ERROR_DIALOG);			
 		}
 }
 
 
-  function deleteSeafileAccount(){
+
+  function post_remove()
+  {
+	
 	global $config;
-	$ldap = $config->get_ldap_link();
-	$array_dn=ldap_explode_dn($this->attrs['fdSeafileAccountServer'][0],1);
-	$ldap->search('(&(objectClass=fdSeafileService)(cn='.$array_dn[0].'))', array('fdSeafileServiceURI','fdSeafileServiceTechnicalAccount','fdSeafileServiceTechnicalPassword'));
-	$attrs = $ldap->fetch();
-	$urlParsed=parse_url($attrs['fdSeafileServiceURI'][0]);
+	
+	$seafileServers = objects::ls('server', array('cn' => 1,'fdSeafileServiceURI' => 1, 'fdSeafileServiceTechnicalAccount' => '*', 'fdSeafileServiceTechnicalPassword' => '*'), $this->attributesAccess['fdSeafileAccountServer']->getValue(), '(objectClass=fdSeafileService)');
+	
+	$urlParsed=parse_url($seafileServers[$this->attributesAccess['fdSeafileAccountServer']->getValue()]['fdSeafileServiceURI']);
+	$technicalAccount=$seafileServers[$this->attributesAccess['fdSeafileAccountServer']->getValue()]['fdSeafileServiceTechnicalAccount'][0];
+	$technicalPassword=$seafileServers[$this->attributesAccess['fdSeafileAccountServer']->getValue()]['fdSeafileServiceTechnicalPassword'][0];
+
+	
 	try {
 		
 		$myclient=new SeafileAPI([
 				'url' => $urlParsed['scheme']."://".$urlParsed['host'],
-				'user' => $attrs['fdSeafileServiceTechnicalAccount'][0],
-				'password' => $attrs['fdSeafileServiceTechnicalPassword'][0],
+				'user' => $technicalAccount,
+				'password' => $technicalPassword,
 				'port' => $urlParsed['port']
 				]);
 		try {
-			$myclient->deleteAccount($this->attr['fdSeafileAccountUser']);
-			 parent::post_remove();
-			}catch (Exception $e){
-			msg_dialog::display(_("Seafile error"), sprintf(_("Error on deleting user : %s"),
-            $e->getMessage()), ERROR_DIALOG);
+				$myclient->deleteAccount($this->attributesAccess['fdSeafileAccountUser']->getValue());
+				parent::post_remove();
+		}catch (Exception $e){
+				msg_dialog::display(_("Seafile error"), sprintf(_("Error on deleting user : %s"),
+				$e->getMessage()), ERROR_DIALOG);
 		}
 				
 				
 	}catch (Exception $e ){	
-			msg_dialog::display(_("Seafile error"), sprintf(_("Error on connecting Seafile Server for deleting : %s"),
-            $e->getMessage()), ERROR_DIALOG);
-		}  
-  }
-
-  function post_remove()
-  {
-	$this->deleteSeafileAccount();
-				
-    #parent::post_remove();
-  }
-
-
-
-# function ldap_save($cleanup = TRUE){
-#	parent::ldap_save($cleanup);
+		msg_dialog::display(_("Seafile error"), sprintf(_("Error on connecting Seafile Server for deleting : %s"),
+        $e->getMessage()), ERROR_DIALOG);
+	}  	
 	
-#  }
-
-
-# function __construct ($dn = NULL, $object = NULL, $parent = NULL, $mainTab = FALSE)
-#  {
-#    global $config;
-#    parent::__construct($dn, $object, $parent, $mainTab);
-#
-    #$this->mainSectionAttrs = array_keys($this->attributesInfo['main']['attrs']);
-    #
-    #
-    # recuperer la liste des serveur Seafile
-    #
-
-
- #   global $config;
-
-  
-  #  $ldap = $config->get_ldap_link();
-  #  $ldap->search('(objectClass=fdSeafileService)', array('cn'));
-  #  $profilesdn    = array();
-  #  $profileslabel = array();
-  #  while ($attrs = $ldap->fetch()) {
-  #     $profilesdn[]    = $attrs['dn'];
-  #     $profileslabel[] = $attrs['cn'][0];
-  #  }
-  #  $this->attributesAccess['fdSeafileAccountServer']->setChoices($profilesdn, $profileslabel);
-
-
-#print_r($this->attrs['fdSeafileAccountServer'][0]);
-
-#print_r('ICI'.$this->attributesAccess['fdSeafileAccountServer'].'LA');
-   # se connecter avec les info du serveur seafile
-   # recuperer le token
-   # demander le quota
-   # faire apparaitre l'usage du quota
-#    $ldap = $config->get_ldap_link();
-#    $ldap->search('(dn='.$this->attrs['fdSeafileAccountServer'][0].')', array('fdSeafileServiceURI','fdSeafileServiceTechnicalAccount','fdSeafileServiceTechnicalPassword'));
-#    $attrs = $ldap->fetch();
-
-#    print_r($attrs);
-#	require_once '/usr/share/fusiondirectory/include/class_seafile.inc';
-
-  #      $myclient=new Client2($attrs['fdSeafileServiceURI'][0]);
-#        if ($myclient->ping()){
-#                # try to get a token
-#                $myclient->generateNewToken($attrs['fdSeafileServiceTechnicalAccount'][0],$attrs['fdSeafileServiceTechnicalPassword'][0]);
-#		$token=$myclient->getAuthToken();
-#                if ($token !== NULL ){
-#                        print_r(_("Token succesfully get"));
-#                }else{
-#                        print_r(_("Unable to get Token"));
-#                }
-#        }else{
-#
-#		print_r("unable to ping server");
- #       }
-
-    
-
-#    $this->attributesAccess['fdSeafileServiceURI']->setChoices(array_keys(mailMethod::getMailServers()));
-#    $this->attributesAccess['gosaMailServer']->setSubmitForm('mailServerChanged');
-#    $this->mailServerChanged();
-#
-#    $this->attributesAccess['flag_ownmailbox']->setInLdap(FALSE);
-#    $this->attributesAccess['flag_vacation']->setInLdap(FALSE);
-#    $this->attributesAccess['flag_localonly']->setInLdap(FALSE);
-#
-#    /* If mail can be used for login it must be unique */
-#    if (in_array('mail', explode(',', $config->get_cfg_value('loginAttribute')))) {
-#      $this->attributesAccess['mail']->setUnique('whole');
-#    }
-#  }
-
+  }
 
 }
 

@@ -191,6 +191,124 @@ class SeafileAPI {
 	}
 
 
+
+
+	/*
+	*	Create a new group
+	*	
+	*	@param array $group
+	*	@return array - The libra
+	*/
+	public function createGroup($name){
+	
+			$post = array(
+				'name' => $name
+			);
+		return $this->decode($this->post($this->seafile_full_url.'/api/v2.1/groups/',$post,
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+	
+	/*
+	*	get a list of group 
+	*   User used have to be member of group in order to see it
+	*	/!\ changement de l'url v2.1
+	*/
+	public function getListGroups(){
+	
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/groups/',
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
+
+	/*
+	*  delete memberto group
+	*  
+	*	
+	*/
+	public function delMemberToGroup($id){
+		
+		#TO CODE
+	
+		return $this->decode($this->del($this->seafile_full_url.'/api/v2.1/groups/'.$id.'/members/',
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
+
+	/*
+	*  add memberto group
+	*  
+	*	
+	*/
+	public function addMemberToGroup($id,$member){
+		
+		$post = array(
+			'email' => $member,
+		);
+	
+		return $this->decode($this->post($this->seafile_full_url.'/api/v2.1/groups/'.$id.'/members/',$post,
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
+	/*
+	*  list member of a group
+	*  
+	*	
+	*/
+	public function getMembersOfGroup($id){
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/groups/'.$id.'/members/',
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
+
+
+
+	/*
+	*	delete a  group
+	*  use must be the creator of the group 
+	*	
+	*/
+	public function deleteGroup($id){
+	
+		return $this->decode($this->delete($this->seafile_full_url.'/api2/groups/'.$id.'/',
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
+
+
+	/*
+	*	delete a new account
+	*	
+	*	@param array $user $password 
+	*	@return array - The libra
+	*/
+	public function clientLogin(){
+	
+		return $this->decode($this->get($this->seafile_full_url.'/api2/client-login/', 
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+	
+	
 	/*
 	*	delete a new account
 	*	
@@ -235,6 +353,18 @@ class SeafileAPI {
 		)));
 	}
 	
+	
+	/*
+	*	Return Seafile account information of specific user
+	*	@param $name
+	*	@return array - The available libraries
+	*/
+		public function getLibraryByOwner($name){
+		return $this->decode($this->get($this->seafile_full_url.'api/v2.1/admin/libraries/?owner='.$name, array(
+			CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+		)));
+	}
+	
 
 	/*
 	*	Return Seafile account information
@@ -246,6 +376,18 @@ class SeafileAPI {
 			CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
 		)));
 	}
+
+
+
+
+
+
+
+
+
+
+
+	
 
 
 
@@ -295,7 +437,7 @@ class SeafileAPI {
 	*	@param array $libraries
 	*	@return array - The libraries infos
 	*/
-	public function getLibrariesInfo($libraries){
+		public function getLibrariesInfo($libraries){
 		if(is_array($libraries)){
 		
 			$return = array();
@@ -538,7 +680,7 @@ class SeafileAPI {
 		
 		$http_options = $http_options + $this->http_options;
 		$this->handle = curl_init($url);
-
+ 
 		if(! curl_setopt_array($this->handle, $http_options))
 			throw new Exception("Error setting cURL request options");
 

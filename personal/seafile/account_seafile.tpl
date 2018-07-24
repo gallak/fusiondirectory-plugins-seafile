@@ -5,9 +5,8 @@
  <div>
   <table>
     <tr>
-      <td>{t}Quota status{/t}</td><td> {$SEAFILE_USAGE} / {$SEAFILE_TOTAL}</td>
-   </tr>
-<tr><td>{t}Connexion status{/t}</td><td></td></tr>
+      <td>{t}Quota status{/t} : {$SEAFILE_USAGE} / {$SEAFILE_TOTAL} Mo </td><td>{$SEAFILE_BAR}</td>	
+       </tr>
   </table>
   </div>
 </fieldset>
