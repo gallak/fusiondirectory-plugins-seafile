@@ -2,7 +2,8 @@
 
 /*
   This code is part of FusionDirectory (http://www.fusiondirectory.org/)
-  Copyright (C) 2012-2016  FusionDirectory
+  Copyright (C) 2011-2018  FusionDirectory
+  Copyright (C) 2018  Antoine Gallavardin
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
