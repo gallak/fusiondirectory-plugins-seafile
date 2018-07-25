@@ -326,7 +326,7 @@ class seafileAccount extends simplePlugin
 					}		
 				}else{
 					//error or fetching information
-					msg_dialog::display(_("Seafile error"), sprintf(_("unable to fetch account information  of %s on %s  seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
+					msg_dialog::display(_("Seafile error"), sprintf(_("Unable to fetch account information of %s on %s seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
 				}
 			}
 
@@ -362,13 +362,13 @@ class seafileAccount extends simplePlugin
 				$myclient->deleteAccount($this->attributesAccess['fdSeafileAccountUser']->getValue());
 				parent::post_remove();
 		}catch (Exception $e){
-				msg_dialog::display(_("Seafile error"), sprintf(_("Error on deleting user : %s"),
+				msg_dialog::display(_("Seafile error"), sprintf(_("Error when deleting user : %s"),
 				$e->getMessage()), ERROR_DIALOG);
 		}
 				
 				
 	}catch (Exception $e ){	
-		msg_dialog::display(_("Seafile error"), sprintf(_("Error on connecting Seafile Server for deleting : %s"),
+		msg_dialog::display(_("Seafile error"), sprintf(_("Error when connecting Seafile Server for deleting : %s"),
         $e->getMessage()), ERROR_DIALOG);
 	}  	
 	

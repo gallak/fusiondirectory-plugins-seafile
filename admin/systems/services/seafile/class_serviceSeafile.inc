@@ -47,7 +47,7 @@ class serviceSeafile extends simpleService
               TRUE),
             new StringAttribute(
               _('fdSeafileServiceTechnicalAccount'),
-              _('Tecnical user for managing Seafile Host'),
+              _('Technical user for managing Seafile Host'),
               'fdSeafileServiceTechnicalAccount',
               TRUE),
             new PasswordAttribute(
