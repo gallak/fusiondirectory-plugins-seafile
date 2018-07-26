@@ -93,7 +93,7 @@ msgstr "Erreur Seafile"
 msgid "Error on seafile settings: %s"
 msgstr "Erreur deparamètrage pour le serveur : %s"
 
-msgid "Account %s not exist on %s  seafile server"
+msgid "Account %s not exist on %s seafile server"
 msgstr "Le compte %s n'existepas sur le serveur %s"
 
 msgid "Error on Fetching User informations: %s"

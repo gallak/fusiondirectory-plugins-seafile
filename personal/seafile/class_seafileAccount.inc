@@ -206,9 +206,9 @@ class seafileAccount extends simplePlugin
 			$this->attributesAccess['fdSeafileAccountIsStaff']->setValue($info->is_staff);
 		}catch (Exception $e ){	
 			if ($myclient->seafile_code == "404"){
-				msg_dialog::display(_("Seafile error"), sprintf(_("Account %s not exist on %s  seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
+				msg_dialog::display(_("Seafile error"), sprintf(_("Account %s not exist on %s seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
 			}else{	
-				msg_dialog::display(_("Seafile error"), sprintf(_("Error on Fetching User inormations: %s"),
+				msg_dialog::display(_("Seafile error"), sprintf(_("Error on Fetching User informations: %s"),
 				$e->getMessage()), ERROR_DIALOG);
 			}
 		}
@@ -281,7 +281,7 @@ class seafileAccount extends simplePlugin
 					
 					$myclient->modifyAccount($this->attrs['fdSeafileAccountUser'],$change_array);
 				}catch (Exception $e ){
-					msg_dialog::display(_("Seafile error"), sprintf(_("Unable to modify account %s :  %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
+					msg_dialog::display(_("Seafile error"), sprintf(_("Unable to modify account %s : %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
 				}
 			}catch (Exception $e ){
 				
@@ -322,7 +322,7 @@ class seafileAccount extends simplePlugin
 						$myclient->modifyAccount($this->attrs['fdSeafileAccountUser'],$change_array);
 						
 					}catch (Exception $e ){
-						msg_dialog::display(_("Seafile error"), sprintf(_("Unable to create account %s :  %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
+						msg_dialog::display(_("Seafile error"), sprintf(_("Unable to create account %s : %s"),attrs['fdSeafileAccountUser'],$e->getMessage()), ERROR_DIALOG);
 					}		
 				}else{
 					//error or fetching information
@@ -331,7 +331,7 @@ class seafileAccount extends simplePlugin
 			}
 
 		}catch (Exception $e ){	
-				msg_dialog::display(_("Seafile error"), sprintf(_("Unable to connect to Seafile Server"),
+				msg_dialog::display(_("Seafile error"), sprintf(_("Unable to connect to Seafile Server : %s"),
 				$e->getMessage()), ERROR_DIALOG);			
 		}
 }
