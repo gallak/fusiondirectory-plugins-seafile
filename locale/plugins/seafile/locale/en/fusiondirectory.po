@@ -18,35 +18,102 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "LibreRoaming service"
-msgstr "LibreRoamin service"
-
 msgid "Seafile service"
 msgstr "Seafile Service"
 
 msgid "Seafile Server Properties"
 msgstr "Seafile Server Properties"
 
-msgid "fdSeafileWebServiceURI"
-msgstr "Seafile Web Service URI"
+msgid "fdSeafileServiceURI"
+msgstr "Seafile Service URI"
 
 msgid "URI of Seafile Web service"
-msgstr "Seafile WebService URI"
+msgstr "Seafile WebService URI like https://<url>:<port>/<path>"
 
-msgid "fdSeafileTechnicalAccount"
+msgid "fdSeafileServiceTechnicalAccount"
 msgstr "Seafile Technical Account"
 
 msgid "Technical user for managing Seafile Host"
 msgstr "Technical account for managing Seafile Object"
 
-msgid "fdSeafileTechnicalPassword"
+msgid "fdSeafileServiceTechnicalPassword"
 msgstr "Password"
 
 msgid "Password of Technical user for managing Seafile Host"
-msgstr "Passqord of technical user for managing SeafileHost"
+msgstr "Password of technical user for managing Seafile Host"
 
-msgid "fdSeafilePort"
-msgstr "TCP port of Seafiel WebService"
+msgid "Status of Seafile Service"
+msgstr "Status of Seafile Service"
 
-msgid "Port dedicated to Seafile Web service"
-msgstr "Port dedicated to seafile Web Service"
+msgid "Seafile"
+msgstr "Seafile"
+
+msgid "Seafile settings"
+msgstr "Seafile settings"
+
+msgid "Seafile account"
+msgstr "Seafile account"
+
+msgid "Seafile User Id"
+msgstr "Seafile User Id"
+
+msgid "Seafile User name"
+msgstr "Seafiel User name"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Specify the Seafile where the user will be hosted on"
+msgstr "Specify the Seafile server where the user will be hosted on"
+
+msgid "Quota size"
+msgstr "Quota size of remote storage"
+
+msgid "Define quota size in MB"
+msgstr "Define quota size (in MB)"
+
+msgid "User is Staff member"
+msgstr "User is Staff member"
+
+msgid "If checked , the user is an administrator of Seafile"
+msgstr "If checked, the user is admin of all seafile Server (community Edition)"
+
+msgid "User is Active"
+msgstr "User is active"
+
+msgid "If checked, the user is active on seafile server"
+msgstr "If checked, the user is active on seafile server"
+
+msgid "Status of Seafile Account"
+msgstr "Status of Seafile Account"
+
+msgid "Seafile error"
+msgstr "Seafiel error"
+
+msgid "Error on seafile settings: %s"
+msgstr "Error on seafile settings for server : %s"
+
+msgid "Account %s not exist on %s  seafile server"
+msgstr "Account %s doesn't exist on %s seafile server"
+
+msgid "Error on Fetching User informations: %s"
+msgstr "Error on fetching user informations: %s"
+
+msgid "Unable to modify account %s : %s"
+msgstr "Unable to modify account %s (error : %s)"
+
+msgid "Unable to create account %s : %s"
+msgstr "Unable to create account %s (error %s)"
+
+msgid "Unable to fetch account information of %s on %s seafile server"
+msgstr "Unable to fetch account information of %s on %s seafile server"
+
+msgid "Unable to connect to Seafile Server : %s"
+msgstr "Unable to connect to Seafile Server (error %s)"
+
+msgid "Error when deleting user : %s"
+msgstr "Error when deleting user (error : %s)"
+
+msgid "Error when connecting Seafile Server for deleting : %s"
+msgstr "Error when connecting Seafile Server for deleting an acount (error : %s)"
+
