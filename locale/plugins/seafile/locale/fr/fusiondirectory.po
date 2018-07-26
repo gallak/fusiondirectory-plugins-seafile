@@ -19,28 +19,101 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Seafile service"
-msgstr "Seafile Service"
+msgstr "Service Seafile"
 
 msgid "Seafile Server Properties"
-msgstr "Seafile Server Properties"
+msgstr "Propriétés du serveur Seafile"
 
 msgid "fdSeafileServiceURI"
-msgstr "Seafile Web Service URI"
+msgstr "URI du service Seafile"
 
 msgid "URI of Seafile Web service"
-msgstr "Seafile WebService URI"
+msgstr "URI du web service seafile du type https://<url>:<port>/<path>"
 
 msgid "fdSeafileServiceTechnicalAccount"
-msgstr "Seafile Technical Account"
+msgstr "Compte de service Seafile"
 
 msgid "Technical user for managing Seafile Host"
-msgstr "Technical account for managing Seafile Object"
+msgstr "Compte de service seafile pour interagir avec le serveur Seafile"
 
 msgid "fdSeafileServiceTechnicalPassword"
-msgstr "Password"
+msgstr "Mot de passe du compte de service"
 
 msgid "Password of Technical user for managing Seafile Host"
-msgstr "Passqord of technical user for managing SeafileHost"
+msgstr "Mot de passe du compte de service pour interagir avec le serveur seafile"
 
-msgid "Port dedicated to Seafile Web service"
-msgstr "Port dedicated to seafile Web Service"
+msgid "Status of Seafile Service"
+msgstr "Statut du serveur seafile"
+
+msgid "Seafile"
+msgstr "Seafile"
+
+msgid "Seafile settings"
+msgstr "Paramètrage Seafile"
+
+msgid "Seafile account"
+msgstr "Compte Seafile"
+
+msgid "Seafile User Id"
+msgstr "Identifiant Seafile"
+
+msgid "Seafile User name"
+msgstr "Nom affiché Seafile"
+
+msgid "Server"
+msgstr "Serveur"
+
+msgid "Specify the Seafile where the user will be hosted on"
+msgstr "Serveur sur lequel l'utilisateur sera hébergé"
+
+msgid "Quota size"
+msgstr "Capacité alloué"
+
+msgid "Define quota size in MB"
+msgstr "Définit la capacité destockage (en MB)"
+
+msgid "User is Staff member"
+msgstr "Est administrateur"
+
+msgid "If checked , the user is an administrator of Seafile"
+msgstr "Si coché, l'utilisateur est déclaré comme administrateur du serveur seafile (community Edition)"
+
+msgid "User is Active"
+msgstr "Est active"
+
+msgid "If checked, the user is active on seafile server"
+msgstr "Si coché, l'utilisateur est actif sur le serveur"
+
+msgid "Status of Seafile Account"
+msgstr "Status du compte seafile"
+
+msgid "Seafile error"
+msgstr "Erreur Seafile"
+
+msgid "Error on seafile settings: %s"
+msgstr "Erreur deparamètrage pour le serveur : %s"
+
+msgid "Account %s not exist on %s  seafile server"
+msgstr "Le compte %s n'existepas sur le serveur %s"
+
+msgid "Error on Fetching User informations: %s"
+msgstr "Erreur lors de la récupération des informations du compte %s"
+
+msgid "Unable to modify account %s : %s"
+msgstr "Impossible de modifier le compte %s (erreur : %s)"
+
+msgid "Unable to create account %s : %s"
+msgstr "Impossible de créer le compte %s (erreur %s)"
+
+msgid "Unable to fetch account information of %s on %s seafile server"
+msgstr "Impossible de recupérer les informations du compte %s sur le serveur %s"
+
+msgid "Unable to connect to Seafile Server : %s"
+msgstr "Impossible de se connecter au serveur (erreur %s)"
+
+msgid "Error when deleting user : %s"
+msgstr "Erreur lors de la suppression de l'utilisteur (erreur : %s)"
+
+msgid "Error when connecting Seafile Server for deleting : %s"
+msgstr "Erreur deconnexion sur le serveur pour la suppression d'un compte (erreur : %s)"
+
