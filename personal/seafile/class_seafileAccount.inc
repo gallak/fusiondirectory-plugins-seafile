@@ -1,8 +1,7 @@
 <?php
 /*
   This code is part of FusionDirectory (http://www.fusiondirectory.org/)
-  Copyright (C) 2007  Fabian Hicker
-  Copyright (C) 2011-2016  FusionDirectory
+  Copyright (C) 2011-2018  FusionDirectory
   Copyright (C) 2018  Antoine Gallavardin
 
   This program is free software; you can redistribute it and/or modify
@@ -327,7 +326,7 @@ class seafileAccount extends simplePlugin
 					}		
 				}else{
 					//error or fetching information
-					msg_dialog::display(_("Seafile error"), sprintf(_("unable to fetch account information  of %s on %s  seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
+					msg_dialog::display(_("Seafile error"), sprintf(_("Unable to fetch account information of %s on %s seafile server"),$this->attrs['fdSeafileAccountUser'][0],$urlParsed['host']),ERROR_DIALOG);
 				}
 			}
 
@@ -363,13 +362,13 @@ class seafileAccount extends simplePlugin
 				$myclient->deleteAccount($this->attributesAccess['fdSeafileAccountUser']->getValue());
 				parent::post_remove();
 		}catch (Exception $e){
-				msg_dialog::display(_("Seafile error"), sprintf(_("Error on deleting user : %s"),
+				msg_dialog::display(_("Seafile error"), sprintf(_("Error when deleting user : %s"),
 				$e->getMessage()), ERROR_DIALOG);
 		}
 				
 				
 	}catch (Exception $e ){	
-		msg_dialog::display(_("Seafile error"), sprintf(_("Error on connecting Seafile Server for deleting : %s"),
+		msg_dialog::display(_("Seafile error"), sprintf(_("Error when connecting Seafile Server for deleting : %s"),
         $e->getMessage()), ERROR_DIALOG);
 	}  	
 	
