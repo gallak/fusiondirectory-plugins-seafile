@@ -19,12 +19,12 @@
 		<td>{t}Connexion status{/t}</td><td>{$SEAFILE_CON}</td>
 	</tr>
 	<tr>
-		<td>{t}Statistics{/t}</td><td>{t}Users  : from Database {/t} ({$SEAFILE_NB_USER_DB}) / {t}Users from LDAP {/t}({$SEAFILE_NB_USER_LDAP}) / {t}Common{/t} ({$SEAFILE_NB_COMMON})</td>
+		<td>{t}Statistics{/t}</td><td>{t}Users{/t}: {t}from Database{/t} ({$SEAFILE_NB_USER_DB}) / {t}from LDAP{/t} ({$SEAFILE_NB_USER_LDAP}) / {t}Common{/t} ({$SEAFILE_NB_COMMON})</td>
 	<tr>
 		<td></td><td>{t}Groups{/t} :{$SEAFILE_NB_GROUPS} </td>		
 	</tr>
 	<tr>
-		<td></td><td>{t}Librairies{/t} : {$SEAFILE_NB_LIBRARIES} {t}librairies corresponding to {/t} {$SEAFILE_TOTAL_NB_FILE} {t}files{/t} {t}and{/t} {$SEAFILE_TOTAL_STORAGE} {t}Mo{/t}</td>		
+		<td></td><td>{t}Libraries{/t} : {$SEAFILE_NB_LIBRARIES} {t}libraries corresponding to{/t} {$SEAFILE_TOTAL_NB_FILE} {t}files{/t} {t}and{/t} {$SEAFILE_TOTAL_STORAGE} {t}Mo{/t}</td>		
 	</tr>
   </table>
   </div>
