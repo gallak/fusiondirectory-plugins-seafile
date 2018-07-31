@@ -360,7 +360,7 @@ class SeafileAPI {
 	*	@return array - The available libraries
 	*/
 		public function getLibraryByOwner($name){
-		return $this->decode($this->get($this->seafile_full_url.'api/v2.1/admin/libraries/?owner='.$name, array(
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/admin/libraries/?owner='.$name, array(
 			CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
 		)));
 	}
