@@ -355,7 +355,7 @@ class SeafileAPI {
 	
 	
 	/*
-	*	Return Seafile account information of specific user
+	*	Return library list of a user
 	*	@param $name
 	*	@return array - The available libraries
 	*/
@@ -365,6 +365,18 @@ class SeafileAPI {
 		)));
 	}
 	
+	/*
+	*	Return trashed library list of a user
+	*	@param $name
+	*	@return array - The trashed libraries
+	*/
+		public function getTrashedLibraryByOwner($name){
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/admin/trash-libraries/?owner='.$name, array(
+			CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+		)));
+	}
+
+
 
 	/*
 	*	Return Seafile account information
