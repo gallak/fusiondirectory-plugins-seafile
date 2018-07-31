@@ -222,7 +222,6 @@ class SeafileAPI {
 		$allGroups=array();
 		
 		while ($has_next_page == "1"){
-			print_r("URL".$this->seafile_full_url.'/api/v2.1/admin/groups/?page='.$curseur.'&per_page='.$pagination."\n");
 			$record=$this->decode($this->get($this->seafile_full_url.'/api/v2.1/admin/groups/?page='.$curseur.'&per_page='.$pagination,
 				array(
 				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
@@ -235,6 +234,33 @@ class SeafileAPI {
 	
 		return $allGroups;
 	}
+
+
+	/*
+	*	get a list of All Libraries (Admin stuff)
+	*   
+	*/
+	public function getAdminListLibraries($pagination){
+	
+		$has_next_page = "1";
+		$curseur=1;
+		$allLibraries=array();
+		
+		while ($has_next_page == "1"){
+			$record=$this->decode($this->get($this->seafile_full_url.'/api/v2.1/admin/libraries/?page='.$curseur.'&per_page='.$pagination,
+				array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+				)
+			));
+			$allLibraries=array_merge($allLibraries,$record->repos);
+			$curseur=$curseur + 1;
+			$has_next_page = $record->page_info->has_next_page;
+			}
+	
+		return $allLibraries;
+	}
+
+
 
 	/*
 	*	get a list of Shared links 
