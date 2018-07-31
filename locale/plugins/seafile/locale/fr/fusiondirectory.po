@@ -126,3 +126,36 @@ msgstr "Existante(s)"
 msgid "number of deleted librairie"
 msgstr "Supprimée(s)"
 
+msgid "Statistics"
+msgstr "Statistiques"
+
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgid "from Database"
+msgstr "Depuis de la base interne Seafile"
+
+msgid "Users from LDAP"
+msgstr "Depuis un annuaire externe"
+
+msgid "Common"
+msgstr "Commun entre la base interne et les bases externes"
+
+msgid "Groups"
+msgstr "Groupes"
+
+msgid "Libraries"
+msgstr "Librairies"
+
+msgid "libraries corresponding to"
+msgstr "librairies correspondant à"
+
+msgid "files"
+msgstr "Fichiers"
+
+msgid "and"
+msgstr "et"
+
+msgid "Mo"
+msgstr "Mo"
+
