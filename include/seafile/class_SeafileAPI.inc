@@ -212,18 +212,70 @@ class SeafileAPI {
 	}
 	
 	/*
-	*	get a list of group 
-	*   User used have to be member of group in order to see it
-	*	/!\ changement de l'url v2.1
+	*	get a list of All group (Admin stuff)
+	*   
 	*/
-	public function getListGroups(){
+	public function getAdminListGroups($pagination){
 	
-		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/groups/',
+		$has_next_page = "1";
+		$curseur=1;
+		$allGroups=array();
+		
+		while ($has_next_page == "1"){
+			print_r("URL".$this->seafile_full_url.'/api/v2.1/admin/groups/?page='.$curseur.'&per_page='.$pagination."\n");
+			$record=$this->decode($this->get($this->seafile_full_url.'/api/v2.1/admin/groups/?page='.$curseur.'&per_page='.$pagination,
+				array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+				)
+			));
+			$allGroups=array_merge($allGroups,$record->groups);
+			$curseur=$curseur + 1;
+			$has_next_page = $record->page_info->has_next_page;
+			}
+	
+		return $allGroups;
+	}
+
+	/*
+	*	get a list of Shared links 
+	*   Use could shared some file and folder
+	*/
+	public function getListSharedLinks(){
+	
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/share-links/',
 			array(
 				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
 			)
 		));
 	}
+
+	/*
+	*	get a list of Shared Folder 
+	*   Use could shared folder
+	*/
+	public function getListSharedFolders(){
+	
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/shared-folders/',
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
+
+	/*
+	*	get a list of Upload links 
+	*   External User could shared an upload links
+	*/
+	public function getListUploadLinks(){
+	
+		return $this->decode($this->get($this->seafile_full_url.'/api/v2.1/upload-links/',
+			array(
+				CURLOPT_HTTPHEADER => array('Authorization: Token '.$this->seafile_token)
+			)
+		));
+	}
+
 
 
 	/*
