@@ -34,6 +34,14 @@ class serviceSeafile extends simpleService
   }
 
 
+  static function objectToUserArray($tabObject){
+    $list = array();
+	foreach ($tabObject as $l){
+      array_push($list, $l->email);
+    }
+    return ($list);
+  }
+
   static function getAttributesInfo ()
   {
       return array (
@@ -87,11 +95,12 @@ class serviceSeafile extends simpleService
 			$smarty->assign('SEAFILE_FEATURES',$cap->features);
 			$smarty->assign('SEAFILE_CON',$myclient->seafile_status."(".$myclient->seafile_code.")");
 			// get server statistic
-			$userLDAP=$myclient->getListLdap();
-			$userDB=$myclient->getListLdap();
+			$userLDAP=$this->objectToUserArray($myclient->getListLdap());
+			$userDB=$this->objectToUserArray($myclient->getListDB());
+
 			$smarty->assign('SEAFILE_NB_USER_LDAP', count($userLDAP));
 			$smarty->assign('SEAFILE_NB_USER_DB', count($userDB));
-			//$smarty->assign('SEAFILE_NB_COMMON', count(array_intersect_($userDB,$userLDAP)));
+			$smarty->assign('SEAFILE_NB_COMMON', count(array_intersect($userDB,$userLDAP)));
 			$smarty->assign('SEAFILE_NB_GROUPS', count($myclient->getAdminListGroups(100)));
 			
 			// compute stat
@@ -105,7 +114,7 @@ class serviceSeafile extends simpleService
 			}
 
 			$smarty->assign('SEAFILE_TOTAL_NB_FILE', $totalf);
-			$smarty->assign('SEAFILE_TOTAL_STORAGE', $totals / 1024 /1024);
+			$smarty->assign('SEAFILE_TOTAL_STORAGE', round($totals / 1024 /1024, 2));
 		}
 	
 	
