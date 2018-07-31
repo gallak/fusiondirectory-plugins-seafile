@@ -86,6 +86,26 @@ class serviceSeafile extends simpleService
 			$smarty->assign('SEAFILE_VERSION',$cap->version);
 			$smarty->assign('SEAFILE_FEATURES',$cap->features);
 			$smarty->assign('SEAFILE_CON',$myclient->seafile_status."(".$myclient->seafile_code.")");
+			// get server statistic
+			$userLDAP=$myclient->getListLdap();
+			$userDB=$myclient->getListLdap();
+			$smarty->assign('SEAFILE_NB_USER_LDAP', count($userLDAP));
+			$smarty->assign('SEAFILE_NB_USER_DB', count($userDB));
+			//$smarty->assign('SEAFILE_NB_COMMON', count(array_intersect_($userDB,$userLDAP)));
+			$smarty->assign('SEAFILE_NB_GROUPS', count($myclient->getAdminListGroups(100)));
+			
+			// compute stat
+			$allLibraries=$myclient->getAdminListLibraries(100);
+			$smarty->assign('SEAFILE_NB_LIBRARIES', count($allLibraries));
+			$totalf=0;
+			$totals=0;
+			foreach ($myclient->getAdminListLibraries(100) as $i){
+				$totals= $totals + $i->size;
+				$totalf= $totalf + $i->file_count;
+			}
+
+			$smarty->assign('SEAFILE_TOTAL_NB_FILE', $totalf);
+			$smarty->assign('SEAFILE_TOTAL_STORAGE', $totals / 1024 /1024);
 		}
 	
 	
@@ -103,4 +123,3 @@ class serviceSeafile extends simpleService
 }
 
 ?>
-
