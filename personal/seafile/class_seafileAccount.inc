@@ -194,9 +194,15 @@ class seafileAccount extends simplePlugin
 			$usage= $info->usage / 1000 / 1000;
 			$total= $info->total / 1000 / 1000;
 			// set SMARTY value
+			// quota usage
 			$smarty->assign('SEAFILE_USAGE',$usage);
 			$smarty->assign('SEAFILE_TOTAL',$total);
 			$smarty->assign('SEAFILE_BAR',$this->quota_to_image($usage, $total));
+
+			// librairies usage
+			$smarty->assign('EXISTING_LIBRARY',count($myclient->getLibraryByOwner($this->attrs['mail'][0])->repos));
+			$smarty->assign('DELETED_LIBRARY',count($myclient->getTrashedLibraryByOwner($this->attrs['mail'][0])->repos));
+			
 			
 			//fetch Quota Value
 			$this->attributesAccess['fdSeafileAccountQuota']->setValue($total);

@@ -117,3 +117,12 @@ msgstr "Erreur lors de la suppression de l'utilisteur (erreur : %s)"
 msgid "Error when connecting Seafile Server for deleting : %s"
 msgstr "Erreur deconnexion sur le serveur pour la suppression d'un compte (erreur : %s)"
 
+msgid "Librairies status"
+msgstr "Etat des librairies"
+
+msgid "number of existing librairie"
+msgstr "Existante(s)"
+
+msgid "number of deleted librairie"
+msgstr "Supprimée(s)"
+

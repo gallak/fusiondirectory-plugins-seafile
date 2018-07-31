@@ -117,3 +117,12 @@ msgstr "Error when deleting user (error : %s)"
 msgid "Error when connecting Seafile Server for deleting : %s"
 msgstr "Error when connecting Seafile Server for deleting an acount (error : %s)"
 
+msgid "Librairies status"
+msgstr "Librairies status"
+
+msgid "number of existing librairie"
+msgstr "Existing"
+
+msgid "number of deleted librairie"
+msgstr "Deleted"
+
